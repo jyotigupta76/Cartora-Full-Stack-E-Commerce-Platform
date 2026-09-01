@@ -1,0 +1,30 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Java / Maven / Spring Boot
+**/target/
+**/*.class
+
+# Maven wrapper generated file
+**/.mvn/wrapper/maven-wrapper.jar
+
+# React / Node
+**/node_modules/
+**/dist/
+
+# Environment / secrets
+.env
+**/.env
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
