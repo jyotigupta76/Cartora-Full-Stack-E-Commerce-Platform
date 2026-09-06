@@ -1,10 +1,13 @@
 package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.dto.ProductDTO;
+import com.ecommerce.ecommerce.dto.SellerStatsResponse;
+import com.ecommerce.ecommerce.entity.Order;
 import com.ecommerce.ecommerce.entity.Product;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.repository.UserRepository;
 import com.ecommerce.ecommerce.service.ProductService;
+import com.ecommerce.ecommerce.service.SellerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,17 +19,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
+    private final SellerService sellerService;
     private final UserRepository userRepository;
 
-    // ===== Public browsing: GET /api/products =====
-    // Supports: ?search=iphone&categoryId=1&brand=Samsung&minPrice=100&maxPrice=500
-    //           &minRating=4&inStock=true&sortBy=price&sortDir=asc&page=0&size=20
     @GetMapping("/api/products")
     public ResponseEntity<Page<Product>> getProducts(
             @RequestParam(required = false) String search,
@@ -58,7 +60,6 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
-    // ===== Seller-only CRUD: /api/seller/products =====
     @PostMapping("/api/seller/products")
     public ResponseEntity<Product> create(@Valid @RequestBody ProductDTO dto, Authentication authentication) {
         User seller = currentUser(authentication);
@@ -69,14 +70,14 @@ public class ProductController {
     public ResponseEntity<Product> update(@PathVariable Long id,
                                           @Valid @RequestBody ProductDTO dto,
                                           Authentication authentication) {
-        User seller = currentUser(authentication);
-        return ResponseEntity.ok(productService.updateProduct(id, dto, seller));
+        User actingUser = currentUser(authentication);
+        return ResponseEntity.ok(productService.updateProduct(id, dto, actingUser));
     }
 
     @DeleteMapping("/api/seller/products/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id, Authentication authentication) {
-        User seller = currentUser(authentication);
-        productService.deleteProduct(id, seller);
+        User actingUser = currentUser(authentication);
+        productService.deleteProduct(id, actingUser);
         return ResponseEntity.noContent().build();
     }
 
@@ -86,6 +87,18 @@ public class ProductController {
                                                     @RequestParam(defaultValue = "20") int size) {
         User seller = currentUser(authentication);
         return ResponseEntity.ok(productService.getSellerProducts(seller, PageRequest.of(page, size)));
+    }
+
+    @GetMapping("/api/seller/orders")
+    public ResponseEntity<List<Order>> getSellerOrders(Authentication authentication) {
+        User seller = currentUser(authentication);
+        return ResponseEntity.ok(sellerService.getSellerOrders(seller));
+    }
+
+    @GetMapping("/api/seller/stats")
+    public ResponseEntity<SellerStatsResponse> getSellerStats(Authentication authentication) {
+        User seller = currentUser(authentication);
+        return ResponseEntity.ok(sellerService.getSellerStats(seller));
     }
 
     private User currentUser(Authentication authentication) {

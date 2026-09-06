@@ -2,18 +2,23 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
     return (
-        <div className="text-center py-20">
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                Welcome to the E-Commerce Store
+        <div className="text-center py-24">
+            <p className="text-amber-accent-dark font-semibold text-sm tracking-wide mb-3">
+                Fresh finds, every day
+            </p>
+            <h1 className="font-display text-5xl font-semibold text-brand-900 mb-4 leading-tight">
+                Everything you need,
+                <br />in one marketplace
             </h1>
-            <p className="text-gray-500 mb-8">
-                Browse products from multiple sellers, all in one place.
+            <p className="text-brand-400 mb-8 max-w-md mx-auto">
+                Browse products from independent sellers, all in one place — curated,
+                searchable, and ready to ship.
             </p>
             <Link
                 to="/products"
-                className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
+                className="inline-block bg-brand-500 text-white px-8 py-3 rounded-full font-semibold hover:bg-brand-600 transition-colors"
             >
-                Browse Products
+                Start Browsing
             </Link>
         </div>
     );

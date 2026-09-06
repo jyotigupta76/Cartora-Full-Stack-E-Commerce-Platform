@@ -1,10 +1,7 @@
 package com.ecommerce.ecommerce.service;
 
 import com.ecommerce.ecommerce.dto.ProductDTO;
-import com.ecommerce.ecommerce.entity.Category;
-import com.ecommerce.ecommerce.entity.Product;
-import com.ecommerce.ecommerce.entity.ProductImage;
-import com.ecommerce.ecommerce.entity.User;
+import com.ecommerce.ecommerce.entity.*;
 import com.ecommerce.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.ecommerce.repository.CategoryRepository;
 import com.ecommerce.ecommerce.repository.ProductRepository;
@@ -69,10 +66,12 @@ public class ProductService {
         return productRepository.findBySeller(seller, pageable);
     }
 
-    public Product updateProduct(Long id, ProductDTO dto, User seller) {
+    public Product updateProduct(Long id, ProductDTO dto, User actingUser) {
         Product product = getProductById(id);
 
-        if (!product.getSeller().getId().equals(seller.getId())) {
+        boolean isOwner = product.getSeller().getId().equals(actingUser.getId());
+        boolean isAdmin = actingUser.getRole() == Role.ADMIN;
+        if (!isOwner && !isAdmin) {
             throw new org.springframework.security.access.AccessDeniedException(
                     "You are not allowed to update this product");
         }
@@ -100,10 +99,12 @@ public class ProductService {
         return saved;
     }
 
-    public void deleteProduct(Long id, User seller) {
+    public void deleteProduct(Long id, User actingUser) {
         Product product = getProductById(id);
 
-        if (!product.getSeller().getId().equals(seller.getId())) {
+        boolean isOwner = product.getSeller().getId().equals(actingUser.getId());
+        boolean isAdmin = actingUser.getRole() == Role.ADMIN;
+        if (!isOwner && !isAdmin) {
             throw new org.springframework.security.access.AccessDeniedException(
                     "You are not allowed to delete this product");
         }

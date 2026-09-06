@@ -1,0 +1,23 @@
+In SecurityConfig.java, find this line in the authorizeHttpRequests block:
+
+    .requestMatchers("/api/auth/**").permitAll()
+
+Add this line right after it:
+
+    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+Full block should now read:
+
+    .authorizeHttpRequests(auth -> auth
+        .requestMatchers("/api/auth/**").permitAll()
+        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+        .requestMatchers("/api/seller/**").hasRole("SELLER")
+        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+        .requestMatchers(HttpMethod.POST, "/api/categories").hasRole("ADMIN")
+        .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("ADMIN")
+        .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
+        .requestMatchers("/api/cart/**", "/api/orders/**").hasRole("CUSTOMER")
+        .anyRequest().authenticated()
+    )
