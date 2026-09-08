@@ -14,7 +14,7 @@ STEPS BEFORE RUNNING:
 
 import requests
 
-BASE_URL = "http://localhost:8080/api"
+BASE_URL = "https://ecommerce-backend-k8n2.onrender.com/api"
 
 ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsImlhdCI6MTc4ODcwNTY0OSwiZXhwIjoxNzg4NzkyMDQ5fQ.1UR28Xa-OHLOMtKUpGw1iwYO4oWT4yYOGnnER04QUQI"
 SELLER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZWxsZXJAdGVzdC5jb20iLCJpYXQiOjE3ODg3MDU4MjAsImV4cCI6MTc4ODc5MjIyMH0.ky9kSM6rhzm48rnf93M58Rv9gWd5U3n2FRWDN4eY81Y"
