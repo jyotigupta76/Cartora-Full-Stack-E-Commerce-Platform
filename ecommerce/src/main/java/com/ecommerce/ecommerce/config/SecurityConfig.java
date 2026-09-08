@@ -1,5 +1,4 @@
-```java
-        package com.ecommerce.ecommerce.config;
+package com.ecommerce.ecommerce.config;
 
 import org.springframework.http.HttpMethod;
 import com.ecommerce.ecommerce.security.CustomUserDetailsService;
